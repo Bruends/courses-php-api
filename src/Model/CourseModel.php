@@ -52,12 +52,49 @@ class CourseModel
         }
     }
 
+    public function save($user_id, $course) {
+        try {
+            $query = "INSERT INTO courses(user_id, name, link, category_id) 
+                VALUES(?,?,?,?)";
+
+            $values = [
+                $user_id,
+                $course->__get("name"),
+                $course->__get("link"),
+                $course->category->__get("id")
+            ];
+            $result = $this->db->preparedQuery($query, $values); 
+            return $result;
+        } catch (PDOException $error) {
+            print_r($error);
+        }
+    }
+
+    public function update($user_id, $course) {
+        try {
+            $query = "UPDATE courses SET name = ?, link = ?, category_id = ?
+                WHERE id = ? AND user_id = ?";
+
+            $values = [
+                $course->__get("name"),
+                $course->__get("link"),
+                $course->category->__get("id"),
+                $course->__get("id"),
+                $user_id
+            ];
+            
+            $result = $this->db->preparedQuery($query, $values);
+            return $result;
+        } catch (PDOException $error) {
+            print_r($error);
+        }
+    }
+
     public function delete($user_id, $course_id) {
         try{
-            $query = "DELETE FROM courses WHERE id = ? AND user_id = ?";
-            $con = Connection::create();
-            $state = $con->prepare($query);
-            $state->execute([$course_id, $user_id]);
+            $query = "DELETE FROM courses WHERE user_id = ? AND id = ?";
+            $result = $this->db->preparedQuery($query, [$user_id, $course_id]);
+            return $result;
         } catch(PDOException $error) {
             print_r($error);
         }
