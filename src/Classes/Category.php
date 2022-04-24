@@ -1,6 +1,6 @@
 <?php
 
-namespace CourseApi\Classes;
+namespace CoursesApi\Classes;
 
 class Category 
 {
