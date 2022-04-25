@@ -17,8 +17,13 @@ $app->addRoutingMiddleware();
 
 $errorMiddleware = $app->addErrorMiddleware(true, true, true);
 
+// auth routes
 $app->post('/auth/register', function (Request $request, Response $response) {
   return AuthController::registerUser($request, $response);
+});
+
+$app->post('/auth/login', function (Request $request, Response $response) {
+  return AuthController::authenticate($request, $response);
 });
 
 $app->run();

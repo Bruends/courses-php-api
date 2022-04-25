@@ -3,6 +3,7 @@
 namespace CoursesApi\Model;
 
 use CoursesApi\Model\DB;
+use CoursesApi\Classes\User;
 
 class UserModel
 {
@@ -12,16 +13,24 @@ class UserModel
     $this->db = new DB();
   }
 
-  public function getUser($username) {
-    try {
-      $query = "SELECT id, username, password FROM user WHERE username = ? LIMIT 1";
-      $result = $this->db->preparedQuery($query, [$username]);
-      return $result;
-
-    } catch (Exception $error) {
-      print_r($error);
+  public function getUser($username) {    
+    $query = "SELECT id, username, password FROM users WHERE username = ? LIMIT 1";
+    $res = $this->db->preparedQuery($query, [$username]);
+      
+    // user not found
+    if(!sizeof($res) == 1){
+      return null;
     }
 
+    // user found
+    $user = new User(
+      $res[0]["username"], 
+      $res[0]["email"], 
+      $res[0]["password"], 
+      $res[0]["id"]
+    );
+      
+    return $user;
   }
 
   public function register($user) {
