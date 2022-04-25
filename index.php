@@ -9,6 +9,7 @@ use Slim\Factory\AppFactory;
 use Tuupola\Middleware\JwtAuthentication;
 
 use CoursesApi\Controller\AuthController;
+use CoursesApi\Controller\CourseController;
 
 $app = AppFactory::create();
 
@@ -36,9 +37,17 @@ $app->post('/auth/login', function (Request $request, Response $response) {
 
 // course routes
 $app->get('/courses', function (Request $request, Response $response) {
-  $response->getBody()->write("courses");
-  return $response;
+  return CourseController::getAllCourses($request, $response);
 });
+
+$app->get('/courses/{id}', function (Request $request, Response $response, $args) {
+  return CourseController::getCourseById($request, $response, $args);
+});
+
+$app->delete('/courses/{id}', function (Request $request, Response $response, $args) {
+  return CourseController::deleteCourse($request, $response, $args);
+});
+
 
 
 
