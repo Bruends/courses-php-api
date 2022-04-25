@@ -27,7 +27,7 @@ class CourseModel
                 ON courses.category_id = categories.id
                 WHERE courses.user_id = ?";
 
-            $results = $this->db->preparedQuery($query, [$user_id]);
+            $results = $this->db->preparedQueryAndFetch($query, [$user_id]);
             return $results;
         } catch (PDOException $error) {
             print_r($error);            
@@ -43,7 +43,7 @@ class CourseModel
                 ON courses.category_id = categories.id
                 WHERE courses.user_id = ? AND courses.id = ?";            
 
-            $result = $this->db->preparedQuery($query, [$user_id, $course_id]);
+            $result = $this->db->preparedQueryAndFetch($query, [$user_id, $course_id]);
 
             return $result;
 

@@ -15,7 +15,7 @@ class UserModel
 
   public function getUser($username) {    
     $query = "SELECT id, username, password FROM users WHERE username = ? LIMIT 1";
-    $res = $this->db->preparedQuery($query, [$username]);
+    $res = $this->db->preparedQueryAndFetch($query, [$username]);
       
     // user not found
     if(!sizeof($res) == 1){

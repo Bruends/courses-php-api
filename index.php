@@ -44,11 +44,16 @@ $app->get('/courses/{id}', function (Request $request, Response $response, $args
   return CourseController::getCourseById($request, $response, $args);
 });
 
+$app->post('/courses', function (Request $request, Response $response) {
+  return CourseController::saveCourse($request, $response);
+});
+
+$app->put('/courses', function (Request $request, Response $response) {
+  return CourseController::updateCourse($request, $response);
+});
+
 $app->delete('/courses/{id}', function (Request $request, Response $response, $args) {
   return CourseController::deleteCourse($request, $response, $args);
 });
-
-
-
 
 $app->run();

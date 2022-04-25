@@ -13,11 +13,17 @@ class DB {
         $this->pdo = $pdo;        
     }
 
-    public function preparedQuery($query, $values) {
-        $prepare = $this->pdo->prepare($query);
-        $prepare->execute($values);
-        $result = $prepare->fetchAll(PDO::FETCH_ASSOC);
+    public function preparedQueryAndFetch($query, $values) {
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute($values);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         return $result;
+    }
+
+    public function preparedQuery($query, $values){
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute($values);
+        return $stmt;
     }
 }
