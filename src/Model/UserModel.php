@@ -1,6 +1,6 @@
 <?php
 
-namespace CoursesApi\UserModel;
+namespace CoursesApi\Model;
 
 use CoursesApi\Model\DB;
 
@@ -14,7 +14,7 @@ class UserModel
 
   public function getUser($username) {
     try {
-      $query = "SELECT id, username, password FROM user WHERE username = ?";
+      $query = "SELECT id, username, password FROM user WHERE username = ? LIMIT 1";
       $result = $this->db->preparedQuery($query, [$username]);
       return $result;
 
@@ -24,21 +24,16 @@ class UserModel
 
   }
 
-  public function addUser($user) {
-    try {
-      $query = "INSERT INTO users(username, email, password) VALUES (?,?,?)";
+  public function register($user) {
+    $query = "INSERT INTO users(username, email, password) VALUES (?,?,?)";
       
-      $values = [
-        $user->__GET("username"),
-        $user->__GET("email"),
-        $user->__GET("password")
-      ];
+    $values = [
+      $user->__GET("username"),
+      $user->__GET("email"),
+      $user->__GET("password")
+    ];
 
-      $result = $this->db->preparedQuery($query, $values);
-      return $result;
-
-    } catch (Exception $error) {
-      print_r($error);
-    }
+    $result = $this->db->preparedQuery($query, $values);
+    return $result;
   }
 }
