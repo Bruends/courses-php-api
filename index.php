@@ -7,6 +7,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 use Tuupola\Middleware\JwtAuthentication;
+use Slim\Exception\HttpNotFoundException;
 
 use CoursesApi\Controller\AuthController;
 use CoursesApi\Controller\CourseController;
@@ -23,7 +24,22 @@ $app->add(new JwtAuthentication([
   "secret" => JWT_KEY
 ]));
 
+// cors middleware
+$app->options('/{routes:.+}', function ($request, $response, $args) {
+  return $response;
+});
 
+$app->add(function ($request, $handler) {
+  $response = $handler->handle($request);
+  return $response
+    ->withHeader('Access-Control-Allow-Origin', '*')
+    ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+    ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+});
+
+
+
+//error middleware
 $errorMiddleware = $app->addErrorMiddleware(true, true, true);
 
 // auth routes
@@ -54,6 +70,11 @@ $app->put('/courses', function (Request $request, Response $response) {
 
 $app->delete('/courses/{id}', function (Request $request, Response $response, $args) {
   return CourseController::deleteCourse($request, $response, $args);
+});
+
+
+$app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($request, $response) {
+  throw new HttpNotFoundException($request);
 });
 
 $app->run();

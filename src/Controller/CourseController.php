@@ -102,7 +102,7 @@ class CourseController
     $courseModel->update($userId, $course);
 
     return $response
-      ->withStatus(201);
+      ->withStatus(200);
   }
 
   public static function deleteCourse($request, $response, $args) {
