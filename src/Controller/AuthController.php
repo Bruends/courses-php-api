@@ -22,7 +22,7 @@ class AuthController
 
       return $response
         ->withHeader('Content-Type', 'application/json')
-        ->withStatus(400);
+        ->withStatus(401);
     }
     
     // check password match
@@ -35,7 +35,7 @@ class AuthController
 
       return $response
         ->withHeader('Content-Type', 'application/json')
-        ->withStatus(400);
+        ->withStatus(401);
     }
     
     // generate jwt with user id
@@ -65,8 +65,7 @@ class AuthController
     $userModel = new UserModel();
     $userModel->register($user);
 
-    return $response
-      ->withHeader('Content-Type', 'application/json')
+    return $response      
       ->withStatus(201);
   }
 }
