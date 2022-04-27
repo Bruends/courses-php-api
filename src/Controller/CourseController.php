@@ -6,6 +6,7 @@ use CoursesApi\Model\CourseModel;
 use CoursesApi\Model\CategoryModel;
 use CoursesApi\Classes\Course;
 use CoursesApi\Utils\Token;
+use CoursesApi\Utils\ValidateParams;
 use Exception;
 
 class CourseController
@@ -66,8 +67,9 @@ class CourseController
       $tokenParam = $request->getHeaderLine("Authorization");      
       $userId = Token::decodeAndGetUserId($tokenParam);
 
-      // getting header
+      // getting and validating course
       $courseParams = $request->getParsedBody();
+      ValidateParams::courseRequest($courseParams);
 
       // getting category from DB
       $categoryName = $courseParams["category"];
@@ -88,14 +90,18 @@ class CourseController
         ->withStatus(201);
 
     } catch (Exception $e) {
+      // getting error code
       $errorStatus = $e->getCode();
-      if($errorStatus == null){
+      if($errorStatus == null)
         $errorStatus = 500;
-      }
+        
+      $response->getBody()->write(json_encode([
+        "message" => $e->getMessage()
+      ]));
 
       return $response
         ->withHeader('Content-Type', 'application/json')
-        ->withStatus($errorStatus);
+        ->withStatus($e->getCode());
     }
   }
 
@@ -105,8 +111,9 @@ class CourseController
       $tokenParam = $request->getHeaderLine("Authorization");      
       $userId = Token::decodeAndGetUserId($tokenParam);
 
-      // getting course params
+      // getting and validating course
       $courseParams = $request->getParsedBody();
+      ValidateParams::courseRequest($courseParams);
 
       // getting category from DB
       $categoryName = $courseParams["category"];
@@ -128,14 +135,18 @@ class CourseController
         ->withStatus(200);
 
       } catch (Exception $e) {
+        // getting error code
         $errorStatus = $e->getCode();
-        if($errorStatus == null){
+        if($errorStatus == null)
           $errorStatus = 500;
-        }
-  
+        
+        $response->getBody()->write(json_encode([
+          "message" => $e->getMessage()
+        ]));
+
         return $response
           ->withHeader('Content-Type', 'application/json')
-          ->withStatus($errorStatus);
+          ->withStatus($e->getCode());
       }
   }
 
