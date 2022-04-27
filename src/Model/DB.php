@@ -10,7 +10,7 @@ class DB {
     public function __construct() {
         $conString = "mysql:host=" . $_ENV["DB_HOST"] . ";dbname=" . $_ENV["DB_NAME"];
         $pdo = new PDO($conString, $_ENV["DB_USER"], $_ENV["DB_PASS"]);
-        $this->pdo = $pdo;        
+        $this->pdo = $pdo;
     }
 
     public function preparedQueryAndFetch($query, $values) {

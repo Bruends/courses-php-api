@@ -2,26 +2,19 @@
 
 namespace CoursesApi\Controller;
 
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
-
 use CoursesApi\Model\CourseModel;
 use CoursesApi\Model\CategoryModel;
 use CoursesApi\Classes\Course;
+use CoursesApi\Utils\Token;
 use Exception;
 
 class CourseController
 {
   public static function getAllCourses($request, $response) {
     try {
-      // getting header
-      $tokenParam = $request->getHeaderLine("Authorization");
-      
-      // decoding token
-      // and getting the userId
-      $token = explode(" ", $tokenParam)[1];
-      $decoded = (array) JWT::decode($token, new Key($_ENV["JWT_KEY"], 'HS256'));   
-      $userId = $decoded["userId"];
+      // getting user id from jwt token
+      $tokenParam = $request->getHeaderLine("Authorization");      
+      $userId = Token::decodeAndGetUserId($tokenParam);
       
       // getting courses
       $courseModel = new CourseModel();
@@ -44,13 +37,9 @@ class CourseController
 
   public static function getCourseById($request, $response, $args) {
     try {
-      // getting header     
-      $tokenParam = $request->getHeaderLine("Authorization");
-      
-      // decoding token and getting the user ID
-      $token = explode(" ", $tokenParam)[1];    
-      $decoded = (array) JWT::decode($token, new Key($_ENV["JWT_KEY"], 'HS256'));   
-      $userId = $decoded["userId"];
+      // getting user id from jwt token
+      $tokenParam = $request->getHeaderLine("Authorization");      
+      $userId = Token::decodeAndGetUserId($tokenParam);
       
       // getting courses
       $courseModel = new CourseModel();
@@ -73,9 +62,12 @@ class CourseController
 
   public static function saveCourse($request, $response) {
     try {
+      // getting user id from jwt token
+      $tokenParam = $request->getHeaderLine("Authorization");      
+      $userId = Token::decodeAndGetUserId($tokenParam);
+
       // getting header
       $courseParams = $request->getParsedBody();
-      $tokenParam = $request->getHeaderLine("Authorization");
 
       // getting category from DB
       $categoryName = $courseParams["category"];
@@ -87,11 +79,6 @@ class CourseController
         $courseParams["link"],
         $category,
       );
-      
-      // decoding token and getting the user ID
-      $token = explode(" ", $tokenParam)[1];    
-      $decoded = (array) JWT::decode($token, new Key($_ENV["JWT_KEY"], 'HS256'));   
-      $userId = $decoded["userId"];
       
       // saving course
       $courseModel = new CourseModel();
@@ -114,9 +101,12 @@ class CourseController
 
   public static function updateCourse($request, $response) {
     try { 
-      // getting header
+      // getting user id from jwt token
+      $tokenParam = $request->getHeaderLine("Authorization");      
+      $userId = Token::decodeAndGetUserId($tokenParam);
+
+      // getting course params
       $courseParams = $request->getParsedBody();
-      $tokenParam = $request->getHeaderLine("Authorization");
 
       // getting category from DB
       $categoryName = $courseParams["category"];
@@ -129,11 +119,6 @@ class CourseController
         $category,
         $courseParams["id"],
       );
-      
-      // decoding token and getting the user ID
-      $token = explode(" ", $tokenParam)[1];    
-      $decoded = (array) JWT::decode($token, new Key($_ENV["JWT_KEY"], 'HS256'));   
-      $userId = $decoded["userId"];
       
       // getting courses
       $courseModel = new CourseModel();
@@ -156,13 +141,9 @@ class CourseController
 
   public static function deleteCourse($request, $response, $args) {
     try {
-      // getting header     
-      $tokenParam = $request->getHeaderLine("Authorization");
-      
-      // decoding token and getting the user ID
-      $token = explode(" ", $tokenParam)[1];    
-      $decoded = (array) JWT::decode($token, new Key($_ENV["JWT_KEY"], 'HS256'));   
-      $userId = $decoded["userId"];
+      // getting user id from jwt token
+      $tokenParam = $request->getHeaderLine("Authorization");      
+      $userId = Token::decodeAndGetUserId($tokenParam);
       
       // deleting course courses
       $courseModel = new CourseModel();

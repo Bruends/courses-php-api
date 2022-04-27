@@ -11,6 +11,7 @@ use Slim\Exception\HttpNotFoundException;
 use CoursesApi\Controller\AuthController;
 use CoursesApi\Controller\CourseController;
 
+// loading .env
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
@@ -38,8 +39,6 @@ $app->add(function ($request, $handler) {
     ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
     ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
 });
-
-
 
 //error middleware
 $errorMiddleware = $app->addErrorMiddleware(true, true, true);
@@ -73,7 +72,6 @@ $app->put('/courses', function (Request $request, Response $response) {
 $app->delete('/courses/{id}', function (Request $request, Response $response, $args) {
   return CourseController::deleteCourse($request, $response, $args);
 });
-
 
 $app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($request, $response) {
   throw new HttpNotFoundException($request);
