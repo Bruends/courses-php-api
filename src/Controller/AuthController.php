@@ -27,7 +27,7 @@ class AuthController
       
       // generate jwt with user id
       $jwtPayload = ["userId" => $user->__get("id")];
-      $jwt = JWT::encode($jwtPayload, JWT_KEY, 'HS256');
+      $jwt = JWT::encode($jwtPayload, $_ENV["JWT_KEY"], 'HS256');
 
       // returning token
       $response->getBody()->write(

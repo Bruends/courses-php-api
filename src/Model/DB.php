@@ -8,8 +8,8 @@ class DB {
     private $pdo;
 
     public function __construct() {
-        $conString = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME;
-        $pdo = new PDO($conString, DB_USER, DB_PASS);
+        $conString = "mysql:host=" . $_ENV["DB_HOST"] . ";dbname=" . $_ENV["DB_NAME"];
+        $pdo = new PDO($conString, $_ENV["DB_USER"], $_ENV["DB_PASS"]);
         $this->pdo = $pdo;        
     }
 

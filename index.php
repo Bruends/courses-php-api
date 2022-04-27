@@ -1,7 +1,6 @@
 <?php
 
 require_once __DIR__ . "/vendor/autoload.php";
-require_once "config.php";
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -12,6 +11,9 @@ use Slim\Exception\HttpNotFoundException;
 use CoursesApi\Controller\AuthController;
 use CoursesApi\Controller\CourseController;
 
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
 $app = AppFactory::create();
 
 // middlewares
@@ -21,7 +23,7 @@ $app->addRoutingMiddleware();
 // jwt auth middleware
 $app->add(new JwtAuthentication([
   "path" => "/courses",
-  "secret" => JWT_KEY
+  "secret" => $_ENV["JWT_KEY"]
 ]));
 
 // cors middleware
@@ -32,7 +34,7 @@ $app->options('/{routes:.+}', function ($request, $response, $args) {
 $app->add(function ($request, $handler) {
   $response = $handler->handle($request);
   return $response
-    ->withHeader('Access-Control-Allow-Origin', '*')
+    ->withHeader('Access-Control-Allow-Origin', $_ENV["ALLOWED_CORS_DOMAINS"])
     ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
     ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
 });
