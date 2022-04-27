@@ -3,8 +3,8 @@
 namespace CoursesApi\Model;
 
 use CoursesApi\Model\DB;
-use CoursesApi\Classes\Course; 
-use PDO;
+use CoursesApi\Classes\Course;
+use Exception;
 use PDOException;
 
 
@@ -29,8 +29,8 @@ class CourseModel
 
             $results = $this->db->preparedQueryAndFetch($query, [$user_id]);
             return $results;
-        } catch (PDOException $error) {
-            print_r($error);            
+        } catch (PDOException $e) {
+            throw new Exception("error on getting courses", 500);
         }
     }
 
@@ -47,8 +47,8 @@ class CourseModel
 
             return $result;
 
-        } catch(PDOException $error) {
-            print_r($error);
+        } catch(PDOException $e) {
+            throw new Exception("error on getting courses", 500);
         }
     }
 
@@ -65,8 +65,8 @@ class CourseModel
             ];
             $result = $this->db->preparedQuery($query, $values); 
             return $result;
-        } catch (PDOException $error) {
-            print_r($error);
+        } catch (PDOException $e) {
+            throw new Exception("error on saving course", 500);
         }
     }
 
@@ -85,8 +85,8 @@ class CourseModel
             
             $result = $this->db->preparedQuery($query, $values);
             return $result;
-        } catch (PDOException $error) {
-            print_r($error);
+        } catch (PDOException $e) {
+            throw new Exception("error on updating course", 500);
         }
     }
 
@@ -95,8 +95,8 @@ class CourseModel
             $query = "DELETE FROM courses WHERE user_id = ? AND id = ?";
             $result = $this->db->preparedQuery($query, [$user_id, $course_id]);
             return $result;
-        } catch(PDOException $error) {
-            print_r($error);
+        } catch(PDOException $e) {
+            throw new Exception("error on deleting course", 500);
         }
     }
 }
