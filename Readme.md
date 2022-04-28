@@ -12,18 +12,19 @@ php version of the courses app api
 ## Techs and Concepts
 - PHP
 - MySQL
+- Slim PHP 4
 - Composer
 - Autoload (psr-4 with composer)
+- php_codesniffer (psr-12)
 - namespaces
-- Slim PHP 4
 - JWT-PHP
+- REST
 - OOP
 - MVC
-- REST
-- php-dot-env ( .env )
+- php-dot-env (.env)
 
 ## Install and Run
-- install the front-end for the app [here](https://github.com/Bruends/courses-app-ui) ( optional )
+- install the front-end for the app [here](https://github.com/Bruends/courses-app-ui) (optional)
 
 - clone this repository
 ```

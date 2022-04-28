@@ -8,13 +8,14 @@ use CoursesApi\Controller\AuthController;
 
 class AuthRoutes
 {
-  public static function addRoutes($app) {
-    $app->post('/auth/register', function (Request $request, Response $response) {
-      return AuthController::registerUser($request, $response);
-    });
-    
-    $app->post('/auth/login', function (Request $request, Response $response) {
-      return AuthController::authenticate($request, $response);
-    });
-  }
+    public static function addRoutes($app)
+    {
+        $app->post('/auth/register', function (Request $request, Response $response) {
+            return AuthController::registerUser($request, $response);
+        });
+
+        $app->post('/auth/login', function (Request $request, Response $response) {
+            return AuthController::authenticate($request, $response);
+        });
+    }
 }

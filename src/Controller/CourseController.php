@@ -11,165 +11,167 @@ use Exception;
 
 class CourseController
 {
-  public static function getAllCourses($request, $response) {
-    try {
-      // getting user id from jwt token
-      $tokenParam = $request->getHeaderLine("Authorization");      
-      $userId = Token::decodeAndGetUserId($tokenParam);
-      
-      // getting courses
-      $courseModel = new CourseModel();
-      $courses = $courseModel->getAll($userId);
+    public static function getAllCourses($request, $response)
+    {
+        try {
+            // getting user id from jwt token
+            $tokenParam = $request->getHeaderLine("Authorization");
+            $userId = Token::decodeAndGetUserId($tokenParam);
 
-      $response->getBody()->write(json_encode($courses));
-      return $response;
+            // getting courses
+            $courseModel = new CourseModel();
+            $courses = $courseModel->getAll($userId);
 
-    } catch (Exception $e) {
-      $errorStatus = $e->getCode();
-      if($errorStatus == null){
-        $errorStatus = 500;
-      }
+            $response->getBody()->write(json_encode($courses));
+            return $response;
+        } catch (Exception $e) {
+            $errorStatus = $e->getCode();
+            if ($errorStatus == null) {
+                $errorStatus = 500;
+            }
 
-      return $response
-        ->withHeader('Content-Type', 'application/json')
-        ->withStatus($errorStatus);
+            return $response
+                ->withHeader('Content-Type', 'application/json')
+                ->withStatus($errorStatus);
+        }
     }
-  } 
 
-  public static function getCourseById($request, $response, $args) {
-    try {
-      // getting user id from jwt token
-      $tokenParam = $request->getHeaderLine("Authorization");      
-      $userId = Token::decodeAndGetUserId($tokenParam);
-      
-      // getting courses
-      $courseModel = new CourseModel();
-      $courses = $courseModel->getById($userId, $args["id"]);
+    public static function getCourseById($request, $response, $args)
+    {
+        try {
+            // getting user id from jwt token
+            $tokenParam = $request->getHeaderLine("Authorization");
+            $userId = Token::decodeAndGetUserId($tokenParam);
 
-      $response->getBody()->write(json_encode($courses));
-      return $response;
+            // getting courses
+            $courseModel = new CourseModel();
+            $courses = $courseModel->getById($userId, $args["id"]);
 
-    } catch (Exception $e) {
-      $errorStatus = $e->getCode();
-      if($errorStatus == null){
-        $errorStatus = 500;
-      }
+            $response->getBody()->write(json_encode($courses));
+            return $response;
+        } catch (Exception $e) {
+            $errorStatus = $e->getCode();
+            if ($errorStatus == null) {
+                $errorStatus = 500;
+            }
 
-      return $response
-        ->withHeader('Content-Type', 'application/json')
-        ->withStatus($errorStatus);
+            return $response
+                ->withHeader('Content-Type', 'application/json')
+                ->withStatus($errorStatus);
+        }
     }
-  }
 
-  public static function saveCourse($request, $response) {
-    try {
-      // getting user id from jwt token
-      $tokenParam = $request->getHeaderLine("Authorization");      
-      $userId = Token::decodeAndGetUserId($tokenParam);
+    public static function saveCourse($request, $response)
+    {
+        try {
+            // getting user id from jwt token
+            $tokenParam = $request->getHeaderLine("Authorization");
+            $userId = Token::decodeAndGetUserId($tokenParam);
 
-      // getting and validating course
-      $courseParams = $request->getParsedBody();
-      ValidateParams::courseRequest($courseParams);
+            // getting and validating course
+            $courseParams = $request->getParsedBody();
+            ValidateParams::courseRequest($courseParams);
 
-      // getting category from DB
-      $categoryName = $courseParams["category"];
-      $categoryModel = new CategoryModel;
-      $category = $categoryModel->getCategoryOrSaveNew($categoryName);
-      
-      $course = new Course(
-        $courseParams["name"],
-        $courseParams["link"],
-        $category,
-      );
-      
-      // saving course
-      $courseModel = new CourseModel();
-      $courseModel->save($userId, $course);    
+            // getting category from DB
+            $categoryName = $courseParams["category"];
+            $categoryModel = new CategoryModel();
+            $category = $categoryModel->getCategoryOrSaveNew($categoryName);
 
-      return $response
-        ->withStatus(201);
+            $course = new Course(
+                $courseParams["name"],
+                $courseParams["link"],
+                $category,
+            );
 
-    } catch (Exception $e) {
-      // getting error code
-      $errorStatus = $e->getCode();
-      if($errorStatus == null)
-        $errorStatus = 500;
-        
-      $response->getBody()->write(json_encode([
-        "message" => $e->getMessage()
-      ]));
+            // saving course
+            $courseModel = new CourseModel();
+            $courseModel->save($userId, $course);
 
-      return $response
-        ->withHeader('Content-Type', 'application/json')
-        ->withStatus($e->getCode());
+            return $response
+                ->withStatus(201);
+        } catch (Exception $e) {
+            // getting error code
+            $errorStatus = $e->getCode();
+            if ($errorStatus == null) {
+                $errorStatus = 500;
+            }
+
+            $response->getBody()->write(json_encode([
+                "message" => $e->getMessage()
+            ]));
+
+            return $response
+                ->withHeader('Content-Type', 'application/json')
+                ->withStatus($e->getCode());
+        }
     }
-  }
 
-  public static function updateCourse($request, $response) {
-    try { 
-      // getting user id from jwt token
-      $tokenParam = $request->getHeaderLine("Authorization");      
-      $userId = Token::decodeAndGetUserId($tokenParam);
+    public static function updateCourse($request, $response)
+    {
+        try {
+            // getting user id from jwt token
+            $tokenParam = $request->getHeaderLine("Authorization");
+            $userId = Token::decodeAndGetUserId($tokenParam);
 
-      // getting and validating course
-      $courseParams = $request->getParsedBody();
-      ValidateParams::courseRequest($courseParams);
+            // getting and validating course
+            $courseParams = $request->getParsedBody();
+            ValidateParams::courseRequest($courseParams);
 
-      // getting category from DB
-      $categoryName = $courseParams["category"];
-      $categoryModel = new CategoryModel;
-      $category = $categoryModel->getCategoryOrSaveNew($categoryName);
-      
-      $course = new Course(
-        $courseParams["name"],
-        $courseParams["link"],
-        $category,
-        $courseParams["id"],
-      );
-      
-      // getting courses
-      $courseModel = new CourseModel();
-      $courseModel->update($userId, $course);
+            // getting category from DB
+            $categoryName = $courseParams["category"];
+            $categoryModel = new CategoryModel();
+            $category = $categoryModel->getCategoryOrSaveNew($categoryName);
 
-      return $response
-        ->withStatus(200);
+            $course = new Course(
+                $courseParams["name"],
+                $courseParams["link"],
+                $category,
+                $courseParams["id"],
+            );
 
-      } catch (Exception $e) {
-        // getting error code
-        $errorStatus = $e->getCode();
-        if($errorStatus == null)
-          $errorStatus = 500;
-        
-        $response->getBody()->write(json_encode([
-          "message" => $e->getMessage()
-        ]));
+            // getting courses
+            $courseModel = new CourseModel();
+            $courseModel->update($userId, $course);
 
-        return $response
-          ->withHeader('Content-Type', 'application/json')
-          ->withStatus($e->getCode());
-      }
-  }
+            return $response
+                ->withStatus(200);
+        } catch (Exception $e) {
+            // getting error code
+            $errorStatus = $e->getCode();
+            if ($errorStatus == null) {
+                $errorStatus = 500;
+            }
 
-  public static function deleteCourse($request, $response, $args) {
-    try {
-      // getting user id from jwt token
-      $tokenParam = $request->getHeaderLine("Authorization");      
-      $userId = Token::decodeAndGetUserId($tokenParam);
-      
-      // deleting course courses
-      $courseModel = new CourseModel();
-      $courseModel->delete($userId, $args["id"]);
+            $response->getBody()->write(json_encode([
+                "message" => $e->getMessage()
+            ]));
 
-      return $response;
-
-    } catch (Exception $e) {
-      $errorStatus = $e->getCode();
-      if($errorStatus == null){
-        $errorStatus = 500;
-      }
-
-      return $response        
-        ->withStatus($errorStatus);
+            return $response
+                ->withHeader('Content-Type', 'application/json')
+                ->withStatus($e->getCode());
+        }
     }
-  }
+
+    public static function deleteCourse($request, $response, $args)
+    {
+        try {
+            // getting user id from jwt token
+            $tokenParam = $request->getHeaderLine("Authorization");
+            $userId = Token::decodeAndGetUserId($tokenParam);
+
+            // deleting course courses
+            $courseModel = new CourseModel();
+            $courseModel->delete($userId, $args["id"]);
+
+            return $response;
+        } catch (Exception $e) {
+            $errorStatus = $e->getCode();
+            if ($errorStatus == null) {
+                $errorStatus = 500;
+            }
+
+            return $response
+                ->withStatus($errorStatus);
+        }
+    }
 }
