@@ -8,7 +8,6 @@ php version of the courses app api
 - CRUD Operations
 - Protected Routes
 - Authentication
-- 
 
 ## Techs and Concepts
 - PHP
