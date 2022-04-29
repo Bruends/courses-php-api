@@ -26,7 +26,7 @@
 Post /auth/register
 ```
 Request Body:
-```
+```json
 {
   "email": "example@email.com",
   "username": "YourUser",	
@@ -44,7 +44,7 @@ response status:
 Post /auth/login
 ```
 Request body:
-```
+```json
 {
   "username": "YourUser",	
   "password": "YourPassword"
@@ -52,7 +52,7 @@ Request body:
 ```
 
 Response: 
-```
+```json
 {
   "token": "(generated token)"
 }
@@ -68,7 +68,7 @@ request Header:
 Authorization: Bearer (token)
 ```
 response: 
-```
+```json
 [
   {
 	  "id": 1,
@@ -90,7 +90,7 @@ request Header:
 Authorization: Bearer (token)
 ```
 response: 
-```
+```json
 {
   "id": 1,
   "user_id": 2,
@@ -111,7 +111,7 @@ request Header:
 Authorization: Bearer (token)
 ```
 Request Body:  
-```
+```json
 {
   "name": "Course Name",
   "link": "https://course.com",
@@ -132,9 +132,9 @@ request Header:
 Authorization: Bearer (token)
 ```
 Request Body:  
-```
+```json
 {
-  "id": "1"
+  "id": "1",
   "name": "New Course Name",
   "link": "https://course.com",
   "category": "tech"
