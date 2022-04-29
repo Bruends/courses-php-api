@@ -2,6 +2,8 @@
 
 namespace CoursesApi\Controller;
 
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 use CoursesApi\Model\UserModel;
 use CoursesApi\Classes\User;
 use CoursesApi\Utils\ValidateParams;
@@ -10,7 +12,7 @@ use Firebase\JWT\JWT;
 
 class AuthController
 {
-    public static function authenticate($request, $response)
+    public static function authenticate(Request $request, Response $response): Response
     {
         try {
             $params = $request->getParsedBody();
@@ -48,9 +50,9 @@ class AuthController
                 $errorStatus = 500;
             }
 
-            $response->getBody()->write(json_encode([
-                "message" => $e->getMessage()
-            ]));
+            $response->getBody()->write(
+                json_encode(["message" => $e->getMessage()])
+            );
 
             return $response
                 ->withHeader('Content-Type', 'application/json')
@@ -58,7 +60,7 @@ class AuthController
         }
     }
 
-    public static function registerUser($request, $response)
+    public static function registerUser(Request $request, Response $response): Response
     {
         try {
             $params = $request->getParsedBody();
@@ -82,9 +84,9 @@ class AuthController
                 $errorStatus = 500;
             }
 
-            $response->getBody()->write(json_encode([
-                "message" => $e->getMessage()
-            ]));
+            $response->getBody()->write(
+                json_encode(["message" => $e->getMessage()])
+            );
 
             return $response
                 ->withHeader('Content-Type', 'application/json')

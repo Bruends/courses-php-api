@@ -7,7 +7,7 @@ use Firebase\JWT\Key;
 
 class Token
 {
-    public static function decodeAndGetUserId($encodedToken)
+    public static function decodeAndGetUserId(string $encodedToken): string
     {
         // removing Bearer
         $token = explode(" ", $encodedToken)[1];

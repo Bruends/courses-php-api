@@ -16,9 +16,9 @@ class UserModel
         $this->db = new DB();
     }
 
-    public function getUser($username)
+    public function getUser(string $username): User
     {
-        try {
+        try {            
             $query = "SELECT id, username, password FROM users WHERE username = ? LIMIT 1";
             $res = $this->db->preparedQueryAndFetch($query, [$username]);
 
@@ -41,7 +41,7 @@ class UserModel
         }
     }
 
-    public function register($user)
+    public function register(User $user): bool
     {
         try {
             $query = "INSERT INTO users(username, email, password) VALUES (?,?,?)";
@@ -52,8 +52,8 @@ class UserModel
                 $user->__GET("password")
             ];
 
-            $result = $this->db->preparedQuery($query, $values);
-            return $result;
+            $this->db->preparedQuery($query, $values);
+            return true;
         } catch (PDOException $e) {
             // SQL duplicated entry error
             if ($e->getCode() == 23000) {
@@ -61,7 +61,6 @@ class UserModel
                 if (strpos($e->getMessage(), "username") != false) {
                     throw new Exception("username already in use", 400);
                 }
-
                 // email
                 if (strpos($e->getMessage(), "email") != false) {
                     throw new Exception("email already in use", 400);

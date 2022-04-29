@@ -2,6 +2,8 @@
 
 namespace CoursesApi\Controller;
 
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 use CoursesApi\Model\CourseModel;
 use CoursesApi\Model\CategoryModel;
 use CoursesApi\Classes\Course;
@@ -11,7 +13,7 @@ use Exception;
 
 class CourseController
 {
-    public static function getAllCourses($request, $response)
+    public static function getAllCourses(Request $request, Response $response): Response
     {
         try {
             // getting user id from jwt token
@@ -36,7 +38,7 @@ class CourseController
         }
     }
 
-    public static function getCourseById($request, $response, $args)
+    public static function getCourseById(Request $request, Response $response, array $args): Response
     {
         try {
             // getting user id from jwt token
@@ -61,7 +63,7 @@ class CourseController
         }
     }
 
-    public static function saveCourse($request, $response)
+    public static function saveCourse(Request $request, Response $response): Response
     {
         try {
             // getting user id from jwt token
@@ -96,9 +98,9 @@ class CourseController
                 $errorStatus = 500;
             }
 
-            $response->getBody()->write(json_encode([
-                "message" => $e->getMessage()
-            ]));
+            $response->getBody()->write(
+                json_encode(["message" => $e->getMessage()])
+            );
 
             return $response
                 ->withHeader('Content-Type', 'application/json')
@@ -106,7 +108,7 @@ class CourseController
         }
     }
 
-    public static function updateCourse($request, $response)
+    public static function updateCourse(Request $request, Response $response): Response
     {
         try {
             // getting user id from jwt token
@@ -142,9 +144,9 @@ class CourseController
                 $errorStatus = 500;
             }
 
-            $response->getBody()->write(json_encode([
-                "message" => $e->getMessage()
-            ]));
+            $response->getBody()->write(
+                json_encode(["message" => $e->getMessage()])
+            );
 
             return $response
                 ->withHeader('Content-Type', 'application/json')
@@ -152,7 +154,7 @@ class CourseController
         }
     }
 
-    public static function deleteCourse($request, $response, $args)
+    public static function deleteCourse(Request $request, Response $response, array $args): Response
     {
         try {
             // getting user id from jwt token

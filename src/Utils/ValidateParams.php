@@ -6,7 +6,7 @@ use Exception;
 
 class ValidateParams
 {
-    public static function loginRequest($params)
+    public static function loginRequest(array $params): void
     {
         // validating username
         if (empty($params["username"])) {
@@ -23,7 +23,7 @@ class ValidateParams
         }
     }
 
-    public static function registerRequest($params)
+    public static function registerRequest(array $params): void
     {
         // validating username and password
         self::loginRequest($params);

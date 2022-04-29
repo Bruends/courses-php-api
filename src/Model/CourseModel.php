@@ -2,8 +2,8 @@
 
 namespace CoursesApi\Model;
 
-use CoursesApi\Model\DB;
 use CoursesApi\Classes\Course;
+use CoursesApi\Model\DB;
 use Exception;
 use PDOException;
 
@@ -17,7 +17,7 @@ class CourseModel
     }
 
     // return an associative array with all books
-    public function getAll($user_id)
+    public function getAll(string|int $user_id): array
     {
         try {
             // getting results from db
@@ -35,7 +35,7 @@ class CourseModel
         }
     }
 
-    public function getById($user_id, $course_id)
+    public function getById(string|int $user_id, string|int $course_id): array
     {
         try {
             $query = "SELECT courses.id, courses.user_id, courses.name, courses.link, 
@@ -53,7 +53,7 @@ class CourseModel
         }
     }
 
-    public function save($user_id, $course)
+    public function save(string|int $user_id, Course $course): bool
     {
         try {
             $query = "INSERT INTO courses(user_id, name, link, category_id) 
@@ -65,14 +65,14 @@ class CourseModel
                 $course->__get("link"),
                 $course->category->__get("id")
             ];
-            $result = $this->db->preparedQuery($query, $values);
-            return $result;
+            $this->db->preparedQuery($query, $values);
+            return true;
         } catch (PDOException $e) {
             throw new Exception("error on saving course", 500);
         }
     }
 
-    public function update($user_id, $course)
+    public function update(string|int $user_id, Course $course): bool
     {
         try {
             $query = "UPDATE courses SET name = ?, link = ?, category_id = ?
@@ -86,19 +86,18 @@ class CourseModel
                 $user_id
             ];
 
-            $result = $this->db->preparedQuery($query, $values);
-            return $result;
+            $this->db->preparedQuery($query, $values);
+            return true;
         } catch (PDOException $e) {
             throw new Exception("error on updating course", 500);
         }
     }
 
-    public function delete($user_id, $course_id)
+    public function delete(string|int $user_id, string|int $course_id): void
     {
         try {
             $query = "DELETE FROM courses WHERE user_id = ? AND id = ?";
-            $result = $this->db->preparedQuery($query, [$user_id, $course_id]);
-            return $result;
+            $this->db->preparedQuery($query, [$user_id, $course_id]);
         } catch (PDOException $e) {
             throw new Exception("error on deleting course", 500);
         }

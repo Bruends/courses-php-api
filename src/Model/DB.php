@@ -3,6 +3,7 @@
 namespace CoursesApi\Model;
 
 use PDO;
+use PDOStatement;
 
 class DB
 {
@@ -15,7 +16,7 @@ class DB
         $this->pdo = $pdo;
     }
 
-    public function preparedQueryAndFetch($query, $values)
+    public function preparedQueryAndFetch(string $query, array $values): array|bool
     {
         $stmt = $this->pdo->prepare($query);
         $stmt->execute($values);
@@ -24,7 +25,7 @@ class DB
         return $result;
     }
 
-    public function preparedQuery($query, $values)
+    public function preparedQuery(string $query, array $values): PDOStatement|bool
     {
         $stmt = $this->pdo->prepare($query);
         $stmt->execute($values);
